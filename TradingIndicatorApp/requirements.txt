@@ -5,3 +5,5 @@
 azure-functions
 discord.py
 requests
+pyodbc
+bcrypt

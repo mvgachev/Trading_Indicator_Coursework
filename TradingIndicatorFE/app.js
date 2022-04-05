@@ -14,24 +14,120 @@
 
 'use strict';
 
-// [START gae_flex_quickstart]
-//Set up express
+//Load environment variables
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+
+
+//Add constants
 const express = require('express');
 const app = express();
+const flash = require('express-flash')
+const session = require('express-session')
+const passport = require('passport')
+const configPassport = require('./config/passport-config.js')
+
+
+
+//Initialize passport
+configPassport(
+   passport
+)
+
+//Example database with users
+const users = []
+
 
 //Setup static page handling
 app.set("view engine", "ejs");
 app.use("/static", express.static("public"));
 
-//Handle client interface on /
-app.get("/", (req, res) => {
-  res.render("home");
-});
+
+//Set up body parser
+// const bodyParser = require("body-parser");
+app.use(express.urlencoded({ extended: false }));
+
+
+//Set up session key
+app.use(flash())
+app.use(session({
+  secret: "1234",
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
+
+//View route for home page
+app.get('/', authenticate, (req, res) => {
+  console.log(req.user)
+  console.log(req.isAuthenticated)
+  res.render('home', { username: req.user.discord_username,
+    authenticated: true
+  })
+})
 
 //Handle login interface on /login
 app.get("/login", (req, res) => {
   res.render("login");
 });
+
+//Handle login interface on /login
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+//Handle discord interface
+app.get("/discord", (req, res) => {
+  res.render("discord");
+});
+
+//Signup 
+app.post('/signup', async (req, res) => {
+  try {
+    users.push({
+      id: Date.now().toString(),
+      email: req.body.email,
+      password: req.body.password,
+      discord_username: req.body.discord_username
+    })
+    console.log(`User with email: ${req.body.email} and password ${req.body.password}`);
+    res.redirect('/login')
+  } catch {
+    res.redirect('/signup')
+  }
+})
+
+//Login
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+
+//Logout
+app.post('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/')
+})
+
+
+//Authentication check
+function authenticate(req, res, next) {
+  if (req.isAuthenticated()) {
+    console.log('User is authenticated.')
+
+      return next()
+  }
+  console.log('User is not authenticated.')
+  res.redirect('/login')
+}
 
 
 // Start the server
@@ -40,6 +136,5 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log('Press Ctrl+C to quit.');
 });
-// [END gae_flex_quickstart]
 
 module.exports = app;

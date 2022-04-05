@@ -7,6 +7,8 @@
   overflow: hidden;
   inline-size: 100%;
   margin-inline: auto;
+  top: 0;
+  position: fixed;  
 }
 
 /* Style the links inside the navigation bar */
@@ -28,8 +30,7 @@
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #d44179;
-  color: #3f3f3f;
+  background-color: #e01f76;
 }
 
 /* Add a color to the active/current link */
@@ -140,7 +141,7 @@ a {
 
 a:focus,
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* modules/form.css */
