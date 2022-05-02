@@ -12,7 +12,7 @@ async function playerLogin(credentials) {
 }
 
 async function playerRegister(credentials) {
-  return await fetch("https://tradingindicatorapplication.azurewebsites.net/api/register", {
+  return await fetch("https://tradingindicatorapplication.azurewebsites.net/api/registration", {
     method: "POST",
     headers: { "x-functions-key": APP_KEY },
     body: JSON.stringify(credentials),
@@ -27,5 +27,12 @@ async function getPlayerById(id) {
   }).then((response) => response.json());
 }
 
+async function getKucoinPositions() {
+  return await fetch("https://tradingindicatorapplication.azurewebsites.net/api/getKucoinPositions", {
+    method: "GET",
+    headers: { "x-functions-key": APP_KEY }
+  }).then((response) => response.json());
+}
 
-module.exports = { playerLogin, playerRegister, getPlayerById};
+
+module.exports = { playerLogin, playerRegister, getPlayerById, getKucoinPositions};

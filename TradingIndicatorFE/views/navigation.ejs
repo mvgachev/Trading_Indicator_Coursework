@@ -9,16 +9,14 @@
                 <li class="nav-item"><a href="/login">Login</a></li>
                 <li class="nav-item"><a href="/signup">Sign up</a></li>
             <% } else { %>
-                <li class="nav-item"><a href="/discord"><i class='fab fa-discord'></i></a> </li>
+                <li class="nav-item"><a href="/positions">Positions</a></li>
+                <li class="nav-item"><a href="/discord"><i class="fab fa-discord"></i></a> </li>
                 <!-- Logout with hidden form for a POST request instead of GET -->
                 <li class="nav-item"><a href="javascript: document.logoutForm.submit()">Log out</a> </li>
                 <form name="logoutForm" action="/logout" method="post" hidden="true">
                     <input hidden type="submit"/>
-              </form> 
+                </form> 
             <% } %>
-
-
-            <li class="nav-item"><a href="/faq">FAQ</a></li>
         </ul>
     </div>
 </nav>

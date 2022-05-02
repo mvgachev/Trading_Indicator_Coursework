@@ -2,19 +2,19 @@
 <html lang="en">
 <%- include('header'); -%>
 
-  <%- include('navigation'); -%>
+<%- include('navigation'); -%>
 
-    <br><br>
 
 
     <body class="align">
 
       <div class="grid">
-
+        <br><br><br>
         <h1 class="text--center">Login</h1>
         <% if (messages.error) { %>
-          <%= messages.error %>
-              <% } %>
+          <br>
+          <h6 class="text--center"><%= messages.error %></h6>
+        <% } %>
         <br><br><br><br>
 
         <form action="/login" method="post" class="form login">

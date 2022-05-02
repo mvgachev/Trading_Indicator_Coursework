@@ -13,6 +13,10 @@
       <div class="grid">
 
         <h1 class="text--center">Sign up</h1>
+        <% if (locals.msg) { %>
+          <br>
+          <h6 class="text--center"><%= locals.msg %></h6>
+        <% } %>
         <br><br>
 
         <form action="/signup" method="post" class="form login">
@@ -60,7 +64,5 @@
       </svg>
 
     </body>
-
-
 
 </html>

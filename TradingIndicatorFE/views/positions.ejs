@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <%- include('header'); -%>
+    
+    <%- include('navigation'); -%>
+    <br><br><br><br>
+    <h1>Kucoin   Positions</h1>
+    <br><br>
+
+    <style>
+        table {
+         width: 100%;
+         border-collapse: collapse;
+        }
+        th {
+            font-size: 30px;
+            text-align: center;
+            height: 50px;
+            vertical-align: center;
+        }
+        td {
+            font-size: 20px;
+            text-align: center;
+            height: 30px;
+            vertical-align: center;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <table>
+        <tr>
+        <th>Currency</th><th>Amount</th>
+        </tr>
+    
+        <% for (var i = 0; i < positions.length; i++) { %>
+        <tr>
+        <td><%= positions[i][0] %></td>
+        <td><%= positions[i][1] %></td>
+        </tr>    
+        <% } %>
+    </table>
+
+</html>

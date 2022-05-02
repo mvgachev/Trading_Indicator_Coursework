@@ -28,6 +28,8 @@ const flash = require('express-flash')
 const session = require('express-session')
 const passport = require('passport')
 const configPassport = require('./config/passport-config.js')
+const backend = require("./backend");
+
 
 
 
@@ -63,13 +65,19 @@ app.use(passport.session())
 
 
 
-//View route for home page
-app.get('/', authenticate, (req, res) => {
+// View route for home page
+app.get('/',  (req, res) => {
   console.log(req.user)
   console.log(req.isAuthenticated)
-  res.render('home', { username: req.user.discord_username,
-    authenticated: true
-  })
+  if (req.isAuthenticated()) {
+    res.render('home', { username: req.user.discord_username ,
+      authenticated: true
+    })
+  } else {
+    res.render('home', {
+      authenticated: false
+    })
+  }
 })
 
 //Handle login interface on /login
@@ -83,21 +91,39 @@ app.get("/signup", (req, res) => {
 });
 
 //Handle discord interface
-app.get("/discord", (req, res) => {
-  res.render("discord");
+app.get("/discord", authenticate, (req, res) => {
+  res.render("discord", {authenticated: true});
+});
+
+app.get("/positions", authenticate, async (req, res) => {
+  try{
+    var pos = await backend.getKucoinPositions().catch((error) => {console.log(error)});
+    res.render('positions', {positions: pos, authenticated: true});
+  }
+  catch (error){
+    console.log(error)
+  }
+
 });
 
 //Signup 
 app.post('/signup', async (req, res) => {
   try {
-    users.push({
-      id: Date.now().toString(),
-      email: req.body.email,
-      password: req.body.password,
-      discord_username: req.body.discord_username
-    })
+    var credentials = {
+      "email": req.body.email,
+      "password": req.body.password,
+      "discordUsername": req.body.discord_username
+    }
+    console.log(credentials)
+    var response = await backend.playerRegister(credentials).catch((error) => {console.log(error)});
+    console.log(response)
     console.log(`User with email: ${req.body.email} and password ${req.body.password}`);
-    res.redirect('/login')
+    if (response.success === 'true') {
+      res.redirect('/login')
+    } else {
+      console.log("Registration unsuccessful")
+      res.render('signup', {msg: response.msg})
+    }
   } catch {
     res.redirect('/signup')
   }
