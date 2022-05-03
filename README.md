@@ -1,15 +1,15 @@
-#Trading Indicator Platform
+# Trading Indicator Platform
 
-##Backend:
+## Backend:
 
-###Running Locally:
+### Running Locally:
 1) Clone the repository with the command: 
 git clone https://github.com/mvgachev/Trading_Indicator_Coursework
 2) Open the folder of the backend application with the command: 
 cd  TradingIndicatorApp
 3) Click func start (or press F5 in Visual Studio Code) to start the backend locally
 
-###Deploying on the Azure Cloud Service:
+### Deploying on the Azure Cloud Service:
 1) Clone the repository with the command: 
 git clone https://github.com/mvgachev/Trading_Indicator_Coursework
 2) Open the folder of the backend application with the command: 
@@ -18,9 +18,9 @@ cd  TradingIndicatorApp
 ("TradingIndicatorApplication" being the name of the function app)
 
 
-##Frontend:
+## Frontend:
 
-###Running Locally:
+### Running Locally:
 1) Clone the repository with the command: 
 git clone https://github.com/mvgachev/Trading_Indicator_Coursework
 2) Open the folder of the frontend application with the command: 
