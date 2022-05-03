@@ -4,7 +4,9 @@ import azure.functions as func
 
 from discord import Webhook, RequestsWebhookAdapter
 
-PREDATOR_WEBHOOK_API = 'https://discord.com/api/webhooks/904802607028125746/c5gTxZ7098A8DGVFGJn9ehdkr0TMxV4uQm6rgAqdWSwIKrsMtAi2ddcx88ZauuUNiKOU'
+TERMINATOR_WEBHOOK_API_BTC = 'https://discord.com/api/webhooks/971034686107291668/aHGvtfBGqZb1t14uTTPcly9gu_nkefTlB3DvzMLxOQqAcmahhqXDDsyoJnXH0MjBhZIY'
+TERMINATOR_WEBHOOK_API_ETH = 'https://discord.com/api/webhooks/971040734427893801/ChIdO1wWo-usHR-RurklzxB-_ahKQUlerVypb6oQqYFoqmYKN21popOyrFdFQMPmcjEt'
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
 
@@ -26,8 +28,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if symbol and time_interval and terminator_type:
         logging.info('Terminator trigger function processed a request.')
         
+        if symbol == "BTCUSDT":
+            webhook_api = TERMINATOR_WEBHOOK_API_BTC
+        elif symbol == "ETHUSDT":
+            webhook_api = TERMINATOR_WEBHOOK_API_ETH
+        else:
+            return func.HttpResponse(
+                "The symbol is not supported yet.",
+                status_code=400
+            )
+
         try:
-            webhook = Webhook.from_url(PREDATOR_WEBHOOK_API, adapter=RequestsWebhookAdapter())
+            webhook = Webhook.from_url(webhook_api, adapter=RequestsWebhookAdapter())
         except ConnectionError:
             logging.error("Error with the discord connection!")
         else:
@@ -36,6 +48,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 circle = ":red_circle:"
             elif terminator_type == "Bull div":
                 circle = ":green_circle:"
+            else:
+                return func.HttpResponse(
+                    "The terminator type is invalid.",
+                    status_code=400
+                )
 
             webhook.send("{}  {}  {}  Terminator - {}".format(circle, symbol, time_interval, terminator_type))
 
